@@ -165,31 +165,6 @@ const style = `
     margin-bottom: 2.5rem;
   }
 
-  .hero-stats {
-    display: flex; gap: 3rem;
-    justify-content: center;
-    opacity: 0;
-    animation: fadeUp 0.8s ease forwards 0.9s;
-    margin-bottom: 3rem;
-  }
-  .stat {
-    text-align: center;
-  }
-  .stat-value {
-    font-family: 'Orbitron', monospace;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--cyan);
-    text-shadow: none;
-  }
-  .stat-label {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.6rem;
-    color: rgba(148,163,184,0.4);
-    letter-spacing: 2px;
-    margin-top: 0.3rem;
-  }
-
   .hero-cta {
     display: flex; gap: 1.5rem;
     opacity: 0;
@@ -641,7 +616,6 @@ const style = `
     .nav-links { display: none; }
     section { padding: 5rem 1.5rem; }
     .about-grid, .projects-grid, .skills-grid, .cert-grid { grid-template-columns: 1fr; }
-    .hero-stats { gap: 2rem; }
     .edu-gpa { position: static; transform: none; margin-top: 0.5rem; font-size: 1.5rem; }
     .hero-cta { flex-direction: column; align-items: center; }
   }
@@ -911,25 +885,6 @@ export default function Portfolio() {
           <h1 className="hero-name glitch" data-text="THARAN S M">THARAN S M</h1>
           
           <p className="hero-role">ECE Student · Chip Designer · Verilog HDL</p>
-
-          <div className="hero-stats">
-            <div className="stat">
-              <div className="stat-value">8.94</div>
-              <div className="stat-label">CGPA</div>
-            </div>
-            <div className="stat">
-              <div className="stat-value">2</div>
-              <div className="stat-label">Projects</div>
-            </div>
-            <div className="stat">
-              <div className="stat-value">40%</div>
-              <div className="stat-label">Power Saved</div>
-            </div>
-            <div className="stat">
-              <div className="stat-value">2027</div>
-              <div className="stat-label">Graduating</div>
-            </div>
-          </div>
 
           <div className="hero-cta">
             <button className="btn-primary" onClick={() => scrollTo("projects")}>
