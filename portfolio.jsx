@@ -86,9 +86,27 @@ const style = `
     transition: color 0.3s, text-shadow 0.3s;
     cursor: none;
   }
-  .nav-links a:hover {
+  .nav-links a:hover, .nav-links a.active {
     color: var(--cyan);
     text-shadow: none;
+  }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 200;
+  }
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: rgba(148,163,184,0.7);
+    transition: all 0.3s;
   }
 
   /* HERO */
@@ -433,54 +451,38 @@ const style = `
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
   /* SKILLS */
-  .skills-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-  }
-  .skill-category {
-    position: relative;
-  }
+  .skill-groups { display: flex; flex-direction: column; gap: 2.5rem; }
+  .skill-group {}
   .skill-cat-title {
-    font-family: 'Orbitron', monospace;
-    font-size: 0.8rem;
-    color: var(--electric);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(148,163,184,0.45);
     letter-spacing: 3px;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     text-transform: uppercase;
   }
-  .skill-item {
-    margin-bottom: 1.5rem;
-  }
-  .skill-name {
+  .skill-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .skill-chip {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 0.85rem;
-    color: rgba(148,163,184,0.8);
+    font-size: 0.75rem;
+    padding: 0.4rem 1rem;
+    border-radius: 2px;
     letter-spacing: 1px;
-    margin-bottom: 0.6rem;
-    display: flex; justify-content: space-between;
   }
-  .skill-bar {
-    height: 2px;
-    background: rgba(255,255,255,0.05);
-    position: relative;
-    overflow: visible;
+  .chip-pro {
+    background: rgba(103,184,170,0.08);
+    border: 1px solid rgba(103,184,170,0.25);
+    color: var(--cyan);
   }
-  .skill-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--electric), var(--cyan));
-    position: relative;
-    transition: width 1.5s cubic-bezier(0.25, 1, 0.5, 1);
-    box-shadow: none;
+  .chip-fam {
+    background: rgba(139,123,181,0.07);
+    border: 1px solid rgba(139,123,181,0.2);
+    color: var(--electric);
   }
-  .skill-fill::after {
-    content: '';
-    position: absolute;
-    right: -3px; top: -3px;
-    width: 8px; height: 8px;
-    background: var(--cyan);
-    border-radius: 50%;
-    box-shadow: 0 0 6px rgba(94,234,212,0.4);
+  .chip-learn {
+    background: rgba(148,163,184,0.05);
+    border: 1px solid rgba(148,163,184,0.12);
+    color: rgba(148,163,184,0.5);
   }
 
   /* CERTIFICATIONS */
@@ -583,6 +585,25 @@ const style = `
     letter-spacing: 2px;
   }
 
+  .scroll-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 40px; height: 40px;
+    background: rgba(13,17,23,0.9);
+    border: 1px solid rgba(148,163,184,0.15);
+    color: rgba(148,163,184,0.6);
+    font-size: 1rem;
+    cursor: pointer;
+    z-index: 200;
+    transition: all 0.3s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .scroll-top:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+  }
+
   /* GLITCH */
   .glitch { position: relative; }
   .glitch::before, .glitch::after { display: none; }
@@ -613,11 +634,25 @@ const style = `
 
   @media (max-width: 768px) {
     nav { padding: 1rem 1.5rem; }
-    .nav-links { display: none; }
+    .nav-links {
+      display: none;
+      position: fixed; top: 0; left: 0; right: 0;
+      background: rgba(13,17,23,0.98);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      height: 100vh;
+      z-index: 150;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { font-size: 1rem; letter-spacing: 3px; }
+    .hamburger { display: flex; }
     section { padding: 5rem 1.5rem; }
-    .about-grid, .projects-grid, .skills-grid, .cert-grid { grid-template-columns: 1fr; }
+    .about-grid, .projects-grid, .cert-grid { grid-template-columns: 1fr; }
     .edu-gpa { position: static; transform: none; margin-top: 0.5rem; font-size: 1.5rem; }
     .hero-cta { flex-direction: column; align-items: center; }
+    .scroll-top { bottom: 1rem; right: 1rem; }
   }
 `;
 
@@ -835,24 +870,33 @@ function Reveal({ children, delay = 0 }) {
 }
 
 export default function Portfolio() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
+  const [showTop, setShowTop] = useState(false);
+
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    setMenuOpen(false);
   };
 
+  useEffect(() => {
+    const sections = ["home","about","education","projects","skills","contact"];
+    const onScroll = () => {
+      setShowTop(window.scrollY > 400);
+      const pos = window.scrollY + 140;
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sections[i]);
+        if (el && el.offsetTop <= pos) { setActiveSection(sections[i]); break; }
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const skills = {
-    languages: [
-      { name: "Verilog HDL", level: 90 },
-      { name: "Python", level: 75 },
-      { name: "C Programming", level: 70 },
-      { name: "Tcl Scripting", level: 65 },
-      { name: "Linux CLI & Shell", level: 72 },
-    ],
-    tools: [
-      { name: "Cadence Virtuoso", level: 80 },
-      { name: "Xilinx Vivado", level: 85 },
-      { name: "Digital System Design", level: 88 },
-      { name: "EDA Tool Flow", level: 78 },
-    ],
+    proficient: ["Verilog HDL", "Xilinx Vivado", "Digital System Design", "RTL Design", "FSM Design", "Testbench Writing"],
+    familiar: ["Cadence Virtuoso", "EDA Tool Flow", "Clock Gating", "Python", "C Programming", "Tcl Scripting"],
+    learning: ["SystemVerilog", "UVM Basics", "MATLAB", "Linux CLI", "Shell Scripting"],
   };
 
   return (
@@ -866,11 +910,14 @@ export default function Portfolio() {
         {/* NAV */}
         <nav>
           <div className="nav-logo">TSM</div>
-          <ul className="nav-links">
+          <ul className={`nav-links${menuOpen ? " open" : ""}`}>
             {["about","education","projects","skills","contact"].map(l => (
-              <li key={l}><a href="#" onClick={(e)=>{e.preventDefault();scrollTo(l);}}>{l}</a></li>
+              <li key={l}><a href="#" className={activeSection === l ? "active" : ""} onClick={(e)=>{e.preventDefault();scrollTo(l);}}>{l}</a></li>
             ))}
           </ul>
+          <button className="hamburger" onClick={()=>setMenuOpen(o=>!o)} aria-label="Toggle menu">
+            <span/><span/><span/>
+          </button>
         </nav>
 
         {/* HERO */}
@@ -890,6 +937,9 @@ export default function Portfolio() {
             <button className="btn-primary" onClick={() => scrollTo("projects")}>
               <span>View Projects</span>
             </button>
+            <a className="btn-secondary" href="/tharan-portfolio/resume.pdf" target="_blank" rel="noreferrer">
+              Download CV
+            </a>
             <button className="btn-secondary" onClick={() => scrollTo("contact")}>
               Contact Me
             </button>
@@ -1057,17 +1107,29 @@ export default function Portfolio() {
               <div className="section-line" />
             </div>
           </Reveal>
-          <div className="skills-grid">
+          <div className="skill-groups">
             <Reveal delay={100}>
-              <div className="skill-category">
-                <div className="skill-cat-title">// Languages & Scripting</div>
-                {skills.languages.map(s => <SkillBar key={s.name} {...s} />)}
+              <div className="skill-group">
+                <div className="skill-cat-title">Proficient</div>
+                <div className="skill-chips">
+                  {skills.proficient.map(s => <span key={s} className="skill-chip chip-pro">{s}</span>)}
+                </div>
               </div>
             </Reveal>
             <Reveal delay={200}>
-              <div className="skill-category">
-                <div className="skill-cat-title">// EDA Tools & Design</div>
-                {skills.tools.map(s => <SkillBar key={s.name} {...s} />)}
+              <div className="skill-group">
+                <div className="skill-cat-title">Familiar</div>
+                <div className="skill-chips">
+                  {skills.familiar.map(s => <span key={s} className="skill-chip chip-fam">{s}</span>)}
+                </div>
+              </div>
+            </Reveal>
+            <Reveal delay={300}>
+              <div className="skill-group">
+                <div className="skill-cat-title">Learning</div>
+                <div className="skill-chips">
+                  {skills.learning.map(s => <span key={s} className="skill-chip chip-learn">{s}</span>)}
+                </div>
               </div>
             </Reveal>
           </div>
@@ -1110,14 +1172,11 @@ export default function Portfolio() {
               <a className="contact-link" href="mailto:smtharan52@gmail.com">
                 <span>✉</span> smtharan52@gmail.com
               </a>
-              <a className="contact-link" href="tel:+918608566570">
-                <span>☎</span> +91 8608566570
+              <a className="contact-link" href="https://linkedin.com/in/tharansm" target="_blank" rel="noreferrer">
+                <span>in</span> linkedin.com/in/tharansm
               </a>
-              <a className="contact-link" href="#">
-                <span>in</span> tharansm
-              </a>
-              <a className="contact-link" href="#">
-                <span>⌂</span> mysite.com
+              <a className="contact-link" href="https://github.com/tharansm" target="_blank" rel="noreferrer">
+                <span>⌥</span> github.com/tharansm
               </a>
             </div>
           </Reveal>
@@ -1128,6 +1187,10 @@ export default function Portfolio() {
           <p style={{marginTop:'0.5rem',opacity:0.5}}>DESIGNED WITH PRECISION — BUILT WITH PASSION</p>
         </footer>
       </div>
+
+      {showTop && (
+        <button className="scroll-top" onClick={()=>window.scrollTo({top:0,behavior:'smooth'})} aria-label="Back to top">↑</button>
+      )}
     </>
   );
 }
