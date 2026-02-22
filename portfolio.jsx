@@ -4,14 +4,14 @@ const style = `
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap');
 
   :root {
-    --cyan: #00f5ff;
-    --electric: #7b2fff;
-    --neon-green: #39ff14;
-    --dark: #020408;
-    --dark2: #060d14;
-    --panel: rgba(0,245,255,0.03);
-    --border: rgba(0,245,255,0.15);
-    --text: #c8e6ff;
+    --cyan: #5eead4;
+    --electric: #a78bfa;
+    --neon-green: #86efac;
+    --dark: #060c14;
+    --dark2: #0a1520;
+    --panel: rgba(94,234,212,0.03);
+    --border: rgba(94,234,212,0.12);
+    --text: #cbd5e1;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -32,7 +32,8 @@ const style = `
     pointer-events: none;
     z-index: 9999;
     transition: transform 0.1s;
-    mix-blend-mode: difference;
+    mix-blend-mode: normal;
+    opacity: 0.7;
   }
   .cursor-ring {
     position: fixed;
@@ -42,7 +43,7 @@ const style = `
     pointer-events: none;
     z-index: 9998;
     transition: all 0.15s ease;
-    opacity: 0.5;
+    opacity: 0.25;
   }
 
   canvas.bg-canvas {
@@ -70,7 +71,7 @@ const style = `
     font-weight: 900;
     color: var(--cyan);
     letter-spacing: 3px;
-    text-shadow: 0 0 20px var(--cyan);
+    text-shadow: 0 0 12px rgba(94,234,212,0.4);
   }
   .nav-links {
     display: flex; gap: 2.5rem; list-style: none;
@@ -87,7 +88,7 @@ const style = `
   }
   .nav-links a:hover {
     color: var(--cyan);
-    text-shadow: 0 0 15px var(--cyan);
+    text-shadow: 0 0 8px rgba(94,234,212,0.35);
   }
 
   /* HERO */
@@ -115,7 +116,7 @@ const style = `
 
   .chip-svg {
     width: 100%; height: 100%;
-    filter: drop-shadow(0 0 30px rgba(0,245,255,0.6)) drop-shadow(0 0 60px rgba(123,47,255,0.3));
+    filter: drop-shadow(0 0 12px rgba(94,234,212,0.25)) drop-shadow(0 0 24px rgba(167,139,250,0.15));
   }
 
   .chip-pulse {
@@ -124,8 +125,8 @@ const style = `
     animation: pulsate 2s ease-in-out infinite;
   }
   @keyframes pulsate {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(0,245,255,0.3); }
-    50% { box-shadow: 0 0 0 20px rgba(0,245,255,0); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(94,234,212,0.12); }
+    50% { box-shadow: 0 0 0 14px rgba(94,234,212,0); }
   }
 
   .hero-tag {
@@ -180,7 +181,7 @@ const style = `
     font-size: 2rem;
     font-weight: 700;
     color: var(--cyan);
-    text-shadow: 0 0 20px var(--cyan);
+    text-shadow: none;
   }
   .stat-label {
     font-family: 'Share Tech Mono', monospace;
@@ -237,7 +238,7 @@ const style = `
   .btn-secondary:hover {
     border-color: var(--electric);
     color: var(--electric);
-    box-shadow: 0 0 20px rgba(123,47,255,0.3);
+    box-shadow: 0 0 12px rgba(167,139,250,0.15);
   }
 
   @keyframes fadeUp {
@@ -248,10 +249,10 @@ const style = `
   /* SCAN LINE */
   .scanline {
     position: fixed; top: 0; left: 0; right: 0;
-    height: 2px;
+    height: 1px;
     background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-    opacity: 0.3;
-    animation: scan 6s linear infinite;
+    opacity: 0.1;
+    animation: scan 10s linear infinite;
     z-index: 50;
     pointer-events: none;
   }
@@ -377,8 +378,8 @@ const style = `
     font-size: 2rem;
     font-weight: 900;
     color: var(--cyan);
-    text-shadow: 0 0 20px var(--cyan);
-    opacity: 0.8;
+    text-shadow: none;
+    opacity: 0.7;
   }
 
   /* PROJECTS */
@@ -417,8 +418,8 @@ const style = `
   }
   .project-card:hover::before { bottom: 0; }
   .project-card:hover {
-    border-color: rgba(0,245,255,0.5);
-    box-shadow: 0 20px 60px rgba(0,245,255,0.1);
+    border-color: rgba(94,234,212,0.3);
+    box-shadow: 0 12px 32px rgba(94,234,212,0.06);
     transform: translateY(-4px);
   }
   .project-number {
@@ -508,7 +509,7 @@ const style = `
     background: linear-gradient(90deg, var(--electric), var(--cyan));
     position: relative;
     transition: width 1.5s cubic-bezier(0.25, 1, 0.5, 1);
-    box-shadow: 0 0 10px var(--cyan);
+    box-shadow: none;
   }
   .skill-fill::after {
     content: '';
@@ -517,7 +518,7 @@ const style = `
     width: 8px; height: 8px;
     background: var(--cyan);
     border-radius: 50%;
-    box-shadow: 0 0 10px var(--cyan);
+    box-shadow: 0 0 6px rgba(94,234,212,0.4);
   }
 
   /* CERTIFICATIONS */
@@ -608,8 +609,8 @@ const style = `
   .contact-link:hover {
     border-color: var(--cyan);
     color: var(--cyan);
-    box-shadow: 0 0 20px rgba(0,245,255,0.15);
-    background: rgba(0,245,255,0.03);
+    box-shadow: 0 0 10px rgba(94,234,212,0.08);
+    background: rgba(94,234,212,0.03);
   }
 
   /* FOOTER */
@@ -724,7 +725,7 @@ function ParticleCanvas() {
 
     // Grid
     const drawGrid = () => {
-      ctx.strokeStyle = "rgba(0,245,255,0.03)";
+      ctx.strokeStyle = "rgba(94,234,212,0.025)";
       ctx.lineWidth = 1;
       const spacing = 60;
       for (let x = 0; x < canvas.width; x += spacing) {
@@ -752,7 +753,7 @@ function ParticleCanvas() {
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 120) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(0,245,255,${0.08 * (1 - dist / 120)})`;
+            ctx.strokeStyle = `rgba(94,234,212,${0.04 * (1 - dist / 120)})`;
             ctx.lineWidth = 0.5;
             ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
           }
@@ -760,7 +761,7 @@ function ParticleCanvas() {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0,245,255,${p.opacity})`;
+        ctx.fillStyle = `rgba(94,234,212,${p.opacity * 0.5})`;
         ctx.fill();
       });
 
@@ -812,8 +813,8 @@ function ChipSVG() {
           <stop offset="100%" stopColor="#0a1a2a" />
         </linearGradient>
         <linearGradient id="cg2" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#00f5ff" />
-          <stop offset="100%" stopColor="#7b2fff" />
+          <stop offset="0%" stopColor="#5eead4" />
+          <stop offset="100%" stopColor="#a78bfa" />
         </linearGradient>
         <filter id="glow">
           <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
@@ -822,51 +823,51 @@ function ChipSVG() {
       </defs>
 
       {/* Chip body */}
-      <rect x="50" y="50" width="100" height="100" rx="4" fill="url(#cg1)" stroke="rgba(0,245,255,0.4)" strokeWidth="1.5" filter="url(#glow)" />
+      <rect x="50" y="50" width="100" height="100" rx="4" fill="url(#cg1)" stroke="rgba(94,234,212,0.3)" strokeWidth="1.5" filter="url(#glow)" />
       
       {/* Inner die */}
-      <rect x="65" y="65" width="70" height="70" rx="2" fill="rgba(0,245,255,0.04)" stroke="rgba(0,245,255,0.2)" strokeWidth="1" />
+      <rect x="65" y="65" width="70" height="70" rx="2" fill="rgba(94,234,212,0.03)" stroke="rgba(94,234,212,0.15)" strokeWidth="1" />
       
       {/* Circuit paths */}
-      <path d="M70 80 h20 v8 h-8 v4 h8 v8 h-20" stroke="rgba(0,245,255,0.5)" strokeWidth="1" fill="none" filter="url(#glow)" />
-      <path d="M130 80 h-20 v8 h8 v4 h-8 v8 h20" stroke="rgba(123,47,255,0.5)" strokeWidth="1" fill="none" filter="url(#glow)" />
-      <path d="M80 130 v-20 h8 v-8 h4 v8 h8 v20" stroke="rgba(0,245,255,0.5)" strokeWidth="1" fill="none" filter="url(#glow)" />
-      <path d="M80 70 v20 h8 v-8 h4 v8 h8 v-20" stroke="rgba(123,47,255,0.5)" strokeWidth="1" fill="none" filter="url(#glow)" />
+      <path d="M70 80 h20 v8 h-8 v4 h8 v8 h-20" stroke="rgba(94,234,212,0.4)" strokeWidth="1" fill="none" filter="url(#glow)" />
+      <path d="M130 80 h-20 v8 h8 v4 h-8 v8 h20" stroke="rgba(167,139,250,0.4)" strokeWidth="1" fill="none" filter="url(#glow)" />
+      <path d="M80 130 v-20 h8 v-8 h4 v8 h8 v20" stroke="rgba(94,234,212,0.4)" strokeWidth="1" fill="none" filter="url(#glow)" />
+      <path d="M80 70 v20 h8 v-8 h4 v8 h8 v-20" stroke="rgba(167,139,250,0.4)" strokeWidth="1" fill="none" filter="url(#glow)" />
 
       {/* Center mark */}
-      <rect x="90" y="90" width="20" height="20" fill="rgba(0,245,255,0.08)" stroke="rgba(0,245,255,0.3)" strokeWidth="1" />
-      <line x1="90" y1="90" x2="110" y2="110" stroke="rgba(0,245,255,0.3)" strokeWidth="0.5"/>
-      <line x1="110" y1="90" x2="90" y2="110" stroke="rgba(0,245,255,0.3)" strokeWidth="0.5"/>
-      <circle cx="100" cy="100" r="3" fill="rgba(0,245,255,0.8)" filter="url(#glow)" />
+      <rect x="90" y="90" width="20" height="20" fill="rgba(94,234,212,0.06)" stroke="rgba(94,234,212,0.25)" strokeWidth="1" />
+      <line x1="90" y1="90" x2="110" y2="110" stroke="rgba(94,234,212,0.2)" strokeWidth="0.5"/>
+      <line x1="110" y1="90" x2="90" y2="110" stroke="rgba(94,234,212,0.2)" strokeWidth="0.5"/>
+      <circle cx="100" cy="100" r="3" fill="rgba(94,234,212,0.7)" filter="url(#glow)" />
 
       {/* Pins - top */}
       {[62,76,90,104,118,132].map((x, i) => (
-        <line key={`t${i}`} x1={x} y1="50" x2={x} y2="38" stroke={i % 2 === 0 ? "rgba(0,245,255,0.6)" : "rgba(123,47,255,0.6)"} strokeWidth="2" filter="url(#glow)" />
+        <line key={`t${i}`} x1={x} y1="50" x2={x} y2="38" stroke={i % 2 === 0 ? "rgba(94,234,212,0.45)" : "rgba(167,139,250,0.45)"} strokeWidth="2" filter="url(#glow)" />
       ))}
       {/* Pins - bottom */}
       {[62,76,90,104,118,132].map((x, i) => (
-        <line key={`b${i}`} x1={x} y1="150" x2={x} y2="162" stroke={i % 2 === 0 ? "rgba(0,245,255,0.6)" : "rgba(123,47,255,0.6)"} strokeWidth="2" filter="url(#glow)" />
+        <line key={`b${i}`} x1={x} y1="150" x2={x} y2="162" stroke={i % 2 === 0 ? "rgba(94,234,212,0.45)" : "rgba(167,139,250,0.45)"} strokeWidth="2" filter="url(#glow)" />
       ))}
       {/* Pins - left */}
       {[62,76,90,104,118,132].map((y, i) => (
-        <line key={`l${i}`} x1="50" y1={y} x2="38" y2={y} stroke={i % 2 === 0 ? "rgba(0,245,255,0.6)" : "rgba(123,47,255,0.6)"} strokeWidth="2" filter="url(#glow)" />
+        <line key={`l${i}`} x1="50" y1={y} x2="38" y2={y} stroke={i % 2 === 0 ? "rgba(94,234,212,0.45)" : "rgba(167,139,250,0.45)"} strokeWidth="2" filter="url(#glow)" />
       ))}
       {/* Pins - right */}
       {[62,76,90,104,118,132].map((y, i) => (
-        <line key={`r${i}`} x1="150" y1={y} x2="162" y2={y} stroke={i % 2 === 0 ? "rgba(0,245,255,0.6)" : "rgba(123,47,255,0.6)"} strokeWidth="2" filter="url(#glow)" />
+        <line key={`r${i}`} x1="150" y1={y} x2="162" y2={y} stroke={i % 2 === 0 ? "rgba(94,234,212,0.45)" : "rgba(167,139,250,0.45)"} strokeWidth="2" filter="url(#glow)" />
       ))}
 
       {/* Notch */}
-      <circle cx="55" cy="55" r="3" fill="rgba(0,245,255,0.3)" />
+      <circle cx="55" cy="55" r="3" fill="rgba(94,234,212,0.25)" />
 
       {/* Animated data flow */}
-      <circle cx="0" cy="0" r="2" fill="var(--cyan)" filter="url(#glow)">
+      <circle cx="0" cy="0" r="2" fill="#5eead4" filter="url(#glow)">
         <animateMotion dur="2s" repeatCount="indefinite" path="M62,50 L62,38" />
       </circle>
-      <circle cx="0" cy="0" r="2" fill="#7b2fff" filter="url(#glow)">
+      <circle cx="0" cy="0" r="2" fill="#a78bfa" filter="url(#glow)">
         <animateMotion dur="2.5s" repeatCount="indefinite" path="M50,90 L38,90" />
       </circle>
-      <circle cx="0" cy="0" r="2" fill="var(--cyan)" filter="url(#glow)">
+      <circle cx="0" cy="0" r="2" fill="#5eead4" filter="url(#glow)">
         <animateMotion dur="1.8s" repeatCount="indefinite" path="M132,150 L132,162" />
       </circle>
     </svg>
@@ -886,7 +887,7 @@ function SkillBar({ name, level }) {
 
   return (
     <div className="skill-item" ref={ref}>
-      <div className="skill-name"><span>{name}</span><span style={{color:'rgba(0,245,255,0.5)', fontSize:'0.7rem'}}>{level}%</span></div>
+      <div className="skill-name"><span>{name}</span><span style={{color:'rgba(94,234,212,0.45)', fontSize:'0.7rem'}}>{level}%</span></div>
       <div className="skill-bar">
         <div className="skill-fill" style={{ width: filled ? `${level}%` : "0%" }} />
       </div>
@@ -1020,31 +1021,31 @@ export default function Portfolio() {
             </Reveal>
             <Reveal delay={200}>
               <div className="about-visual">
-                <svg viewBox="0 0 400 350" width="100%" height="100%" style={{filter:'drop-shadow(0 0 20px rgba(0,245,255,0.2))'}}>
+                <svg viewBox="0 0 400 350" width="100%" height="100%" style={{filter:'drop-shadow(0 0 10px rgba(94,234,212,0.1))'}}>
                   <defs>
                     <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="rgba(0,245,255,0.2)"/>
-                      <stop offset="100%" stopColor="rgba(123,47,255,0.1)"/>
+                      <stop offset="0%" stopColor="rgba(94,234,212,0.15)"/>
+                      <stop offset="100%" stopColor="rgba(167,139,250,0.08)"/>
                     </linearGradient>
                   </defs>
                   {/* Waveform display */}
-                  <rect x="20" y="20" width="360" height="310" rx="4" fill="rgba(0,10,20,0.8)" stroke="rgba(0,245,255,0.15)" strokeWidth="1"/>
-                  <text x="30" y="45" fill="rgba(0,245,255,0.4)" fontSize="10" fontFamily="monospace">CLK_SIGNAL_ANALYZER v2.1</text>
-                  <line x1="20" y1="55" x2="380" y2="55" stroke="rgba(0,245,255,0.1)" strokeWidth="1"/>
+                  <rect x="20" y="20" width="360" height="310" rx="4" fill="rgba(0,10,20,0.8)" stroke="rgba(94,234,212,0.12)" strokeWidth="1"/>
+                  <text x="30" y="45" fill="rgba(94,234,212,0.35)" fontSize="10" fontFamily="monospace">CLK_SIGNAL_ANALYZER v2.1</text>
+                  <line x1="20" y1="55" x2="380" y2="55" stroke="rgba(94,234,212,0.08)" strokeWidth="1"/>
 
                   {/* CLK */}
-                  <text x="30" y="85" fill="rgba(0,245,255,0.6)" fontSize="9" fontFamily="monospace">CLK</text>
-                  <polyline points="60,100 60,75 100,75 100,100 140,100 140,75 180,75 180,100 220,100 220,75 260,75 260,100 300,100 300,75 340,75 340,100 370,100" fill="none" stroke="#00f5ff" strokeWidth="1.5">
+                  <text x="30" y="85" fill="rgba(94,234,212,0.5)" fontSize="9" fontFamily="monospace">CLK</text>
+                  <polyline points="60,100 60,75 100,75 100,100 140,100 140,75 180,75 180,100 220,100 220,75 260,75 260,100 300,100 300,75 340,75 340,100 370,100" fill="none" stroke="#5eead4" strokeWidth="1.5">
                     <animate attributeName="stroke-dashoffset" from="500" to="0" dur="2s" fill="freeze"/>
                   </polyline>
 
                   {/* DATA */}
-                  <text x="30" y="135" fill="rgba(123,47,255,0.8)" fontSize="9" fontFamily="monospace">DATA</text>
-                  <polyline points="60,150 60,125 120,125 120,150 160,150 160,125 200,125 200,150 240,150 240,125 280,125 280,150 340,150 340,125 370,125" fill="none" stroke="#7b2fff" strokeWidth="1.5"/>
+                  <text x="30" y="135" fill="rgba(167,139,250,0.7)" fontSize="9" fontFamily="monospace">DATA</text>
+                  <polyline points="60,150 60,125 120,125 120,150 160,150 160,125 200,125 200,150 240,150 240,125 280,125 280,150 340,150 340,125 370,125" fill="none" stroke="#a78bfa" strokeWidth="1.5"/>
 
                   {/* ALU_OUT */}
-                  <text x="30" y="185" fill="rgba(57,255,20,0.7)" fontSize="9" fontFamily="monospace">ALU</text>
-                  <polyline points="60,200 60,175 80,175 80,200 140,200 140,175 200,175 200,200 220,200 220,175 300,175 300,200 370,200" fill="none" stroke="#39ff14" strokeWidth="1.5"/>
+                  <text x="30" y="185" fill="rgba(134,239,172,0.65)" fontSize="9" fontFamily="monospace">ALU</text>
+                  <polyline points="60,200 60,175 80,175 80,200 140,200 140,175 200,175 200,200 220,200 220,175 300,175 300,200 370,200" fill="none" stroke="#86efac" strokeWidth="1.5"/>
 
                   {/* CTRL FSM */}
                   <text x="30" y="235" fill="rgba(255,200,0,0.6)" fontSize="9" fontFamily="monospace">FSM</text>
@@ -1052,12 +1053,12 @@ export default function Portfolio() {
 
                   {/* Grid lines */}
                   {[60,100,140,180,220,260,300,340].map((x,i)=>(
-                    <line key={i} x1={x} y1="55" x2={x} y2="305" stroke="rgba(0,245,255,0.04)" strokeWidth="1" strokeDasharray="4,4"/>
+                    <line key={i} x1={x} y1="55" x2={x} y2="305" stroke="rgba(94,234,212,0.04)" strokeWidth="1" strokeDasharray="4,4"/>
                   ))}
 
                   {/* Time markers */}
                   {[60,100,140,180,220,260,300,340].map((x,i)=>(
-                    <text key={i} x={x-5} y="320" fill="rgba(0,245,255,0.25)" fontSize="8" fontFamily="monospace">{i*10}ns</text>
+                    <text key={i} x={x-5} y="320" fill="rgba(94,234,212,0.2)" fontSize="8" fontFamily="monospace">{i*10}ns</text>
                   ))}
                   
                   {/* Animated cursor */}
