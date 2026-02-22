@@ -1,4 +1,15 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import emailjs from '@emailjs/browser';
+
+// ── EmailJS credentials ──────────────────────────────────────────────────────
+// 1. Sign up free at https://www.emailjs.com
+// 2. Add a Gmail (or any) service  →  copy the Service ID below
+// 3. Create an email template      →  copy the Template ID below
+//    Template variables to use: {{from_name}}, {{from_email}}, {{subject}}, {{message}}
+// 4. Go to Account → API Keys     →  copy your Public Key below
+const EJ_SERVICE  = 'service_srw9yvf';    // e.g. 'service_abc123'
+const EJ_TEMPLATE = 'template_ighm0bf';  // e.g. 'template_xyz456'
+const EJ_PUBLIC   = 'ZguF3_IAgszbAZo7H';   // e.g. 'user_AbcDeFgHiJk'
 
 const style = `
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap');
@@ -181,6 +192,29 @@ const style = `
     opacity: 0;
     animation: fadeUp 0.8s ease forwards 0.7s;
     margin-bottom: 2.5rem;
+  }
+
+  .hero-availability {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    color: var(--neon-green);
+    border: 1px solid rgba(114,168,138,0.25);
+    background: rgba(114,168,138,0.05);
+    padding: 0.45rem 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.9s;
+  }
+  .avail-dot {
+    width: 7px; height: 7px;
+    background: var(--neon-green);
+    border-radius: 50%;
+    animation: blink 1.5s infinite;
+    flex-shrink: 0;
   }
 
   .hero-cta {
@@ -368,6 +402,12 @@ const style = `
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
   }
+  .project-card.featured {
+    border-color: rgba(94,234,212,0.15);
+  }
+  .reveal.col-full {
+    grid-column: 1 / -1;
+  }
   .project-card {
     background: var(--panel);
     border: 1px solid var(--border);
@@ -425,6 +465,34 @@ const style = `
   }
   .project-tags {
     display: flex; flex-wrap: wrap; gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .project-links {
+    display: flex; gap: 0.8rem; flex-wrap: wrap;
+  }
+  .project-link {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+    padding: 0.35rem 0.9rem;
+    border: 1px solid rgba(148,163,184,0.2);
+    color: rgba(148,163,184,0.6);
+    text-decoration: none;
+    transition: all 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: none;
+  }
+  .project-link:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    background: rgba(94,234,212,0.03);
+  }
+  .project-link.demo:hover {
+    border-color: var(--electric);
+    color: var(--electric);
+    background: rgba(139,123,181,0.04);
   }
   .tag {
     font-family: 'Share Tech Mono', monospace;
@@ -548,8 +616,18 @@ const style = `
   .contact-sub {
     font-size: 1.1rem;
     color: rgba(148,163,184,0.5);
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
     letter-spacing: 1px;
+  }
+  .contact-meta {
+    display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+  .contact-meta-item {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    color: rgba(148,163,184,0.4);
   }
   .contact-links {
     display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
@@ -572,6 +650,135 @@ const style = `
     color: var(--cyan);
     box-shadow: 0 0 10px rgba(94,234,212,0.08);
     background: rgba(94,234,212,0.03);
+  }
+
+  /* CONTACT FORM */
+  .cf-wrapper {
+    margin-top: 4rem;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+  }
+  .cf-divider {
+    display: flex; align-items: center; gap: 1.2rem;
+    margin-bottom: 2.5rem;
+  }
+  .cf-divider-line {
+    flex: 1; height: 1px;
+    background: rgba(148,163,184,0.1);
+  }
+  .cf-divider-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: rgba(148,163,184,0.3);
+    letter-spacing: 3px;
+    white-space: nowrap;
+  }
+  .cf-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .cf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+  .cf-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    color: rgba(148,163,184,0.4);
+    text-transform: uppercase;
+  }
+  .cf-input, .cf-textarea {
+    background: rgba(148,163,184,0.03);
+    border: 1px solid rgba(148,163,184,0.12);
+    color: rgba(226,232,240,0.9);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    padding: 0.75rem 1rem;
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s;
+    width: 100%;
+    border-radius: 0;
+  }
+  .cf-input::placeholder, .cf-textarea::placeholder {
+    color: rgba(148,163,184,0.2);
+  }
+  .cf-input:focus, .cf-textarea:focus {
+    border-color: rgba(103,184,170,0.45);
+    box-shadow: 0 0 0 1px rgba(103,184,170,0.1);
+    background: rgba(103,184,170,0.025);
+  }
+  .cf-textarea {
+    min-height: 140px;
+    resize: vertical;
+  }
+  .cf-submit {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    padding: 0.9rem 2.5rem;
+    background: transparent;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    cursor: pointer;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  .cf-submit::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--cyan);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  .cf-submit:hover:not(:disabled)::before { transform: translateX(0); }
+  .cf-submit:hover:not(:disabled) { color: var(--dark); }
+  .cf-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+  .cf-submit span { position: relative; z-index: 1; }
+  .cf-status {
+    margin-top: 1.2rem;
+    padding: 0.85rem 1.2rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .cf-status.success {
+    border: 1px solid rgba(114,168,138,0.3);
+    background: rgba(114,168,138,0.05);
+    color: var(--neon-green);
+  }
+  .cf-status.error {
+    border: 1px solid rgba(248,113,113,0.3);
+    background: rgba(248,113,113,0.04);
+    color: #f87171;
+  }
+  .cf-spin {
+    display: inline-block;
+    width: 12px; height: 12px;
+    border: 1.5px solid rgba(103,184,170,0.3);
+    border-top-color: var(--cyan);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (max-width: 768px) {
+    .cf-row { grid-template-columns: 1fr; }
   }
 
   /* FOOTER */
@@ -854,8 +1061,148 @@ function SkillBar({ name, level }) {
   );
 }
 
+// ── Contact Form ─────────────────────────────────────────────────────────────
+function ContactForm() {
+  const [fields, setFields] = useState({ from_name: '', from_email: '', subject: '', message: '' });
+  const [status, setStatus] = useState(null); // null | 'sending' | 'success' | 'error'
+  const [errMsg, setErrMsg] = useState('');
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    const e = {};
+    if (!fields.from_name.trim()) e.from_name = 'Name is required';
+    if (!fields.from_email.trim()) e.from_email = 'Email is required';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.from_email)) e.from_email = 'Invalid email';
+    if (!fields.subject.trim()) e.subject = 'Subject is required';
+    if (!fields.message.trim()) e.message = 'Message is required';
+    return e;
+  };
+
+  const handleChange = (e) => {
+    setFields(f => ({ ...f, [e.target.name]: e.target.value }));
+    if (errors[e.target.name]) setErrors(er => ({ ...er, [e.target.name]: undefined }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const errs = validate();
+    if (Object.keys(errs).length) { setErrors(errs); return; }
+    setStatus('sending');
+    setErrMsg('');
+    try {
+      emailjs.init({ publicKey: EJ_PUBLIC });
+      await emailjs.send(
+        EJ_SERVICE,
+        EJ_TEMPLATE,
+        {
+          name:    fields.from_name,
+          email:   fields.from_email,
+          title:   fields.subject,
+          message: fields.message,
+        }
+      );
+      setStatus('success');
+      setFields({ from_name: '', from_email: '', subject: '', message: '' });
+    } catch (err) {
+      console.error('EmailJS error:', err);
+      const msg = err?.text || err?.message || JSON.stringify(err) || 'Unknown error';
+      setErrMsg(msg);
+      setStatus('error');
+    }
+  };
+
+  return (
+    <div className="cf-wrapper">
+      <div className="cf-divider">
+        <div className="cf-divider-line" />
+        <span className="cf-divider-text">// SEND A MESSAGE</span>
+        <div className="cf-divider-line" />
+      </div>
+
+      <form onSubmit={handleSubmit} noValidate>
+        <div className="cf-row">
+          <div className="cf-field">
+            <label className="cf-label">Your Name</label>
+            <input
+              className="cf-input"
+              name="from_name"
+              placeholder="e.g. Rahul Kumar"
+              value={fields.from_name}
+              onChange={handleChange}
+              autoComplete="name"
+            />
+            {errors.from_name && <span style={{color:'#f87171',fontSize:'0.6rem',fontFamily:"'Share Tech Mono'",letterSpacing:'1px'}}>{errors.from_name}</span>}
+          </div>
+          <div className="cf-field">
+            <label className="cf-label">Your Email</label>
+            <input
+              className="cf-input"
+              name="from_email"
+              type="email"
+              placeholder="e.g. rahul@example.com"
+              value={fields.from_email}
+              onChange={handleChange}
+              autoComplete="email"
+            />
+            {errors.from_email && <span style={{color:'#f87171',fontSize:'0.6rem',fontFamily:"'Share Tech Mono'",letterSpacing:'1px'}}>{errors.from_email}</span>}
+          </div>
+        </div>
+
+        <div className="cf-field">
+          <label className="cf-label">Subject</label>
+          <input
+            className="cf-input"
+            name="subject"
+            placeholder="e.g. Internship Opportunity at XYZ Semiconductors"
+            value={fields.subject}
+            onChange={handleChange}
+          />
+          {errors.subject && <span style={{color:'#f87171',fontSize:'0.6rem',fontFamily:"'Share Tech Mono'",letterSpacing:'1px'}}>{errors.subject}</span>}
+        </div>
+
+        <div className="cf-field">
+          <label className="cf-label">Message</label>
+          <textarea
+            className="cf-textarea"
+            name="message"
+            placeholder="Write your message here..."
+            value={fields.message}
+            onChange={handleChange}
+          />
+          {errors.message && <span style={{color:'#f87171',fontSize:'0.6rem',fontFamily:"'Share Tech Mono'",letterSpacing:'1px'}}>{errors.message}</span>}
+        </div>
+
+        {/* Hidden field so EmailJS template can show the reply-to address */}
+        <input type="hidden" name="to_email" value="smtharan52@gmail.com" />
+
+        <button className="cf-submit" type="submit" disabled={status === 'sending'}>
+          <span>
+            {status === 'sending' ? 'TRANSMITTING...' : 'SEND MESSAGE'}
+          </span>
+        </button>
+
+        {status === 'sending' && (
+          <div className="cf-status">
+            <span className="cf-spin" /> Establishing connection...
+          </div>
+        )}
+        {status === 'success' && (
+          <div className="cf-status success">
+            ✓ &nbsp;Message transmitted successfully — I'll get back to you soon!
+          </div>
+        )}
+        {status === 'error' && (
+          <div className="cf-status error">
+            ✕ &nbsp;{errMsg || 'Transmission failed. Please email smtharan52@gmail.com directly'}
+          </div>
+        )}
+      </form>
+    </div>
+  );
+}
+
 // Reveal wrapper
-function Reveal({ children, delay = 0 }) {
+function Reveal({ children, delay = 0, className = "" }) {
   const ref = useRef(null);
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => {
@@ -866,7 +1213,7 @@ function Reveal({ children, delay = 0 }) {
     if (ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
   }, [delay]);
-  return <div ref={ref} className="reveal">{children}</div>;
+  return <div ref={ref} className={`reveal${className ? " " + className : ""}`}>{children}</div>;
 }
 
 export default function Portfolio() {
@@ -880,7 +1227,7 @@ export default function Portfolio() {
   };
 
   useEffect(() => {
-    const sections = ["home","about","education","projects","skills","contact"];
+    const sections = ["home","about","education","projects","skills","certifications","contact"];
     const onScroll = () => {
       setShowTop(window.scrollY > 400);
       const pos = window.scrollY + 140;
@@ -911,7 +1258,7 @@ export default function Portfolio() {
         <nav>
           <div className="nav-logo">TSM</div>
           <ul className={`nav-links${menuOpen ? " open" : ""}`}>
-            {["about","education","projects","skills","contact"].map(l => (
+            {["about","education","projects","skills","certifications","contact"].map(l => (
               <li key={l}><a href="#" className={activeSection === l ? "active" : ""} onClick={(e)=>{e.preventDefault();scrollTo(l);}}>{l}</a></li>
             ))}
           </ul>
@@ -932,6 +1279,11 @@ export default function Portfolio() {
           <h1 className="hero-name glitch" data-text="THARAN S M">THARAN S M</h1>
           
           <p className="hero-role">ECE Student · Chip Designer · Verilog HDL</p>
+
+          <div className="hero-availability">
+            <span className="avail-dot" />
+            Available for Internships — 2025 / 2026
+          </div>
 
           <div className="hero-cta">
             <button className="btn-primary" onClick={() => scrollTo("projects")}>
@@ -1063,8 +1415,8 @@ export default function Portfolio() {
             </div>
           </Reveal>
           <div className="projects-grid">
-            <Reveal delay={100}>
-              <div className="project-card">
+            <Reveal delay={100} className="col-full">
+              <div className="project-card featured">
                 <div className="project-number">PRJ_001 // JAN 2026 – PRESENT</div>
                 <div className="project-highlight"><span className="dot" />ACTIVE DEVELOPMENT</div>
                 <div className="project-title">16-Bit Multicycle Processor with Adaptive ALU & Booth MAC Unit</div>
@@ -1079,6 +1431,12 @@ export default function Portfolio() {
                     <span key={t} className="tag">{t}</span>
                   ))}
                 </div>
+                <div className="project-links">
+                  <a className="project-link" href="https://github.com/tharansm/16bit-multicycle-processor" target="_blank" rel="noreferrer">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                  </a>
+                </div>
               </div>
             </Reveal>
             <Reveal delay={200}>
@@ -1092,6 +1450,32 @@ export default function Portfolio() {
                   {["Verilog HDL","Sequential Logic","Flip-Flops","Registers","Power Optimization","Testbench","Simulation"].map(t=>(
                     <span key={t} className="tag">{t}</span>
                   ))}
+                </div>
+                <div className="project-links">
+                  <a className="project-link" href="https://github.com/tharansm/clock-gating-sequential" target="_blank" rel="noreferrer">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                  </a>
+                </div>
+              </div>
+            </Reveal>
+            <Reveal delay={300}>
+              <div className="project-card">
+                <div className="project-number">PRJ_003 // SEP 2025 – OCT 2025</div>
+                <div className="project-title">4-Bit ALU Design with Overflow Detection</div>
+                <p className="project-desc">
+                  Designed and verified a 4-bit Arithmetic Logic Unit in Verilog HDL supporting ADD, SUB, AND, OR, XOR, and NOT operations. Integrated carry and overflow detection logic. Validated all operation modes using comprehensive testbenches in Xilinx Vivado.
+                </p>
+                <div className="project-tags">
+                  {["Verilog HDL","ALU","Combinational Logic","Overflow Detection","Xilinx Vivado","Simulation"].map(t=>(
+                    <span key={t} className="tag">{t}</span>
+                  ))}
+                </div>
+                <div className="project-links">
+                  <a className="project-link" href="https://github.com/tharansm/4bit-alu" target="_blank" rel="noreferrer">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                  </a>
                 </div>
               </div>
             </Reveal>
@@ -1136,7 +1520,7 @@ export default function Portfolio() {
         </section>
 
         {/* CERTIFICATIONS */}
-        <section>
+        <section id="certifications">
           <Reveal>
             <div className="section-header">
               <span className="section-num">05</span>
@@ -1163,24 +1547,31 @@ export default function Portfolio() {
         </section>
 
         {/* CONTACT */}
-        <div className="contact-section" id="contact">
+        <section className="contact-section" id="contact">
           <Reveal>
             <p style={{fontFamily:"'Share Tech Mono'",fontSize:'0.7rem',color:'var(--cyan)',letterSpacing:'4px',marginBottom:'1rem'}}>// INITIATE CONNECTION</p>
             <h2 className="contact-title">LET'S BUILD<br/>THE FUTURE</h2>
             <p className="contact-sub">Open to internships and opportunities in the semiconductor industry</p>
+            <div className="contact-meta">
+              <span className="contact-meta-item">📍 Chennai, Tamil Nadu, India</span>
+              <span className="contact-meta-item">🎓 B.E ECE · 2027</span>
+            </div>
             <div className="contact-links">
               <a className="contact-link" href="mailto:smtharan52@gmail.com">
-                <span>✉</span> smtharan52@gmail.com
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                smtharan52@gmail.com
               </a>
               <a className="contact-link" href="https://linkedin.com/in/tharansm" target="_blank" rel="noreferrer">
-                <span>in</span> linkedin.com/in/tharansm
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                linkedin.com/in/tharansm
               </a>
               <a className="contact-link" href="https://github.com/tharansm" target="_blank" rel="noreferrer">
-                <span>⌥</span> github.com/tharansm
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{flexShrink:0}}><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg> github.com/tharansm
               </a>
             </div>
+            <ContactForm />
           </Reveal>
-        </div>
+        </section>
 
         <footer>
           <p>THARAN S M // VLSI ENGINEER // smtharan52@gmail.com // {new Date().getFullYear()}</p>
