@@ -4,14 +4,14 @@ const style = `
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap');
 
   :root {
-    --cyan: #5eead4;
-    --electric: #a78bfa;
-    --neon-green: #86efac;
-    --dark: #060c14;
-    --dark2: #0a1520;
-    --panel: rgba(94,234,212,0.03);
-    --border: rgba(94,234,212,0.12);
-    --text: #cbd5e1;
+    --cyan: #67b8aa;
+    --electric: #8b7bb5;
+    --neon-green: #72a88a;
+    --dark: #0d1117;
+    --dark2: #161b22;
+    --panel: rgba(103,184,170,0.03);
+    --border: rgba(148,163,184,0.1);
+    --text: #94a3b8;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -62,8 +62,8 @@ const style = `
     z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
     padding: 1.2rem 3rem;
-    background: linear-gradient(180deg, rgba(2,4,8,0.95) 0%, transparent 100%);
-    border-bottom: 1px solid rgba(0,245,255,0.08);
+    background: linear-gradient(180deg, rgba(13,17,23,0.97) 0%, transparent 100%);
+    border-bottom: 1px solid rgba(148,163,184,0.08);
   }
   .nav-logo {
     font-family: 'Orbitron', monospace;
@@ -71,7 +71,7 @@ const style = `
     font-weight: 900;
     color: var(--cyan);
     letter-spacing: 3px;
-    text-shadow: 0 0 12px rgba(94,234,212,0.4);
+    text-shadow: none;
   }
   .nav-links {
     display: flex; gap: 2.5rem; list-style: none;
@@ -79,7 +79,7 @@ const style = `
   .nav-links a {
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.75rem;
-    color: rgba(200,230,255,0.6);
+    color: rgba(148,163,184,0.6);
     text-decoration: none;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -88,7 +88,7 @@ const style = `
   }
   .nav-links a:hover {
     color: var(--cyan);
-    text-shadow: 0 0 8px rgba(94,234,212,0.35);
+    text-shadow: none;
   }
 
   /* HERO */
@@ -110,23 +110,22 @@ const style = `
   }
 
   @keyframes chipFloat {
-    0%, 100% { transform: translateY(0px) rotateY(0deg); }
-    50% { transform: translateY(-20px) rotateY(8deg); }
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
   }
 
   .chip-svg {
     width: 100%; height: 100%;
-    filter: drop-shadow(0 0 12px rgba(94,234,212,0.25)) drop-shadow(0 0 24px rgba(167,139,250,0.15));
+    filter: drop-shadow(0 0 6px rgba(103,184,170,0.12));
   }
 
   .chip-pulse {
     position: absolute; inset: -20px;
     border-radius: 4px;
-    animation: pulsate 2s ease-in-out infinite;
+    animation: none;
   }
   @keyframes pulsate {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(94,234,212,0.12); }
-    50% { box-shadow: 0 0 0 14px rgba(94,234,212,0); }
+    0%, 100% { box-shadow: none; }
   }
 
   .hero-tag {
@@ -146,7 +145,7 @@ const style = `
     font-weight: 900;
     line-height: 0.9;
     letter-spacing: -2px;
-    background: linear-gradient(135deg, #fff 0%, var(--cyan) 50%, var(--electric) 100%);
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 50%, #94a3b8 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -158,7 +157,7 @@ const style = `
   .hero-role {
     font-size: 1.3rem;
     font-weight: 600;
-    color: rgba(200,230,255,0.7);
+    color: rgba(148,163,184,0.7);
     letter-spacing: 4px;
     text-transform: uppercase;
     opacity: 0;
@@ -186,7 +185,7 @@ const style = `
   .stat-label {
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.6rem;
-    color: rgba(200,230,255,0.4);
+    color: rgba(148,163,184,0.4);
     letter-spacing: 2px;
     margin-top: 0.3rem;
   }
@@ -228,8 +227,8 @@ const style = `
     letter-spacing: 2px;
     padding: 0.9rem 2.5rem;
     background: transparent;
-    border: 1px solid rgba(200,230,255,0.2);
-    color: rgba(200,230,255,0.6);
+    border: 1px solid rgba(148,163,184,0.2);
+    color: rgba(148,163,184,0.6);
     cursor: none;
     text-transform: uppercase;
     transition: all 0.3s;
@@ -247,15 +246,7 @@ const style = `
   }
 
   /* SCAN LINE */
-  .scanline {
-    position: fixed; top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-    opacity: 0.1;
-    animation: scan 10s linear infinite;
-    z-index: 50;
-    pointer-events: none;
-  }
+  .scanline { display: none; }
   @keyframes scan {
     from { top: 0; }
     to { top: 100%; }
@@ -283,17 +274,13 @@ const style = `
     font-family: 'Orbitron', monospace;
     font-size: 2.2rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #fff, var(--cyan));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #e2e8f0;
     letter-spacing: 2px;
   }
   .section-line {
     flex: 1;
     height: 1px;
-    background: linear-gradient(90deg, var(--cyan), transparent);
-    opacity: 0.3;
+    background: rgba(148,163,184,0.15);
   }
 
   /* ABOUT */
@@ -306,7 +293,7 @@ const style = `
   .about-text {
     font-size: 1.1rem;
     line-height: 1.9;
-    color: rgba(200,230,255,0.75);
+    color: rgba(148,163,184,0.75);
     font-weight: 300;
   }
   .about-text em {
@@ -326,7 +313,7 @@ const style = `
   }
   .circuit-svg {
     width: 100%; height: 100%;
-    filter: drop-shadow(0 0 10px rgba(0,245,255,0.3));
+    filter: none;
   }
 
   /* EDUCATION */
@@ -343,14 +330,14 @@ const style = `
   .edu-card::before {
     content: '';
     position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(0,245,255,0.05), transparent);
+    background: linear-gradient(135deg, rgba(103,184,170,0.04), transparent);
     opacity: 0;
     transition: opacity 0.3s;
   }
   .edu-card:hover::before { opacity: 1; }
   .edu-card:hover {
-    border-color: rgba(0,245,255,0.4);
-    box-shadow: 0 0 30px rgba(0,245,255,0.1), inset 0 0 30px rgba(0,245,255,0.02);
+    border-color: rgba(148,163,184,0.2);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   }
   .edu-year {
     font-family: 'Share Tech Mono', monospace;
@@ -368,7 +355,7 @@ const style = `
   }
   .edu-school {
     font-size: 1rem;
-    color: rgba(200,230,255,0.6);
+    color: rgba(148,163,184,0.6);
   }
   .edu-gpa {
     position: absolute;
@@ -413,7 +400,7 @@ const style = `
     position: absolute;
     bottom: -100%; left: 0; right: 0;
     height: 100%;
-    background: linear-gradient(0deg, rgba(0,245,255,0.08), transparent);
+    background: linear-gradient(0deg, rgba(103,184,170,0.04), transparent);
     transition: bottom 0.4s ease;
   }
   .project-card:hover::before { bottom: 0; }
@@ -440,7 +427,7 @@ const style = `
   .project-desc {
     font-size: 0.95rem;
     line-height: 1.8;
-    color: rgba(200,230,255,0.6);
+    color: rgba(148,163,184,0.6);
     margin-bottom: 1.5rem;
   }
   .project-tags {
@@ -450,10 +437,10 @@ const style = `
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.6rem;
     padding: 0.3rem 0.8rem;
-    border: 1px solid rgba(0,245,255,0.2);
-    color: var(--cyan);
+    border: 1px solid rgba(148,163,184,0.15);
+    color: rgba(148,163,184,0.7);
     letter-spacing: 1px;
-    background: rgba(0,245,255,0.03);
+    background: rgba(148,163,184,0.04);
   }
   .project-highlight {
     display: inline-flex;
@@ -464,10 +451,10 @@ const style = `
     color: var(--neon-green);
     margin-bottom: 1rem;
     padding: 0.4rem 1rem;
-    border: 1px solid rgba(57,255,20,0.2);
-    background: rgba(57,255,20,0.05);
+    border: 1px solid rgba(114,168,138,0.2);
+    background: rgba(114,168,138,0.04);
   }
-  .dot { width: 6px; height: 6px; background: var(--neon-green); border-radius: 50%; animation: blink 1s infinite; }
+  .dot { width: 6px; height: 6px; background: var(--neon-green); border-radius: 50%; animation: blink 2s infinite; }
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
   /* SKILLS */
@@ -493,7 +480,7 @@ const style = `
   .skill-name {
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.85rem;
-    color: rgba(200,230,255,0.8);
+    color: rgba(148,163,184,0.8);
     letter-spacing: 1px;
     margin-bottom: 0.6rem;
     display: flex; justify-content: space-between;
@@ -543,9 +530,9 @@ const style = `
     background: linear-gradient(180deg, var(--cyan), var(--electric));
   }
   .cert-card:hover {
-    border-color: rgba(0,245,255,0.3);
+    border-color: rgba(148,163,184,0.2);
     transform: translateX(4px);
-    box-shadow: -4px 0 20px rgba(0,245,255,0.1);
+    box-shadow: -2px 0 12px rgba(0,0,0,0.2);
   }
   .cert-org {
     font-family: 'Share Tech Mono', monospace;
@@ -559,14 +546,14 @@ const style = `
     font-family: 'Rajdhani', sans-serif;
     font-size: 1rem;
     font-weight: 600;
-    color: rgba(200,230,255,0.9);
+    color: rgba(148,163,184,0.9);
     line-height: 1.5;
     margin-bottom: 0.5rem;
   }
   .cert-date {
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.65rem;
-    color: rgba(200,230,255,0.3);
+    color: rgba(148,163,184,0.3);
   }
 
   /* CONTACT */
@@ -578,15 +565,12 @@ const style = `
     font-family: 'Orbitron', monospace;
     font-size: clamp(2rem, 6vw, 5rem);
     font-weight: 900;
-    background: linear-gradient(135deg, #fff, var(--cyan), var(--electric));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #e2e8f0;
     margin-bottom: 1.5rem;
   }
   .contact-sub {
     font-size: 1.1rem;
-    color: rgba(200,230,255,0.5);
+    color: rgba(148,163,184,0.5);
     margin-bottom: 3rem;
     letter-spacing: 1px;
   }
@@ -599,7 +583,7 @@ const style = `
     letter-spacing: 2px;
     padding: 1rem 2rem;
     border: 1px solid var(--border);
-    color: rgba(200,230,255,0.7);
+    color: rgba(148,163,184,0.7);
     text-decoration: none;
     cursor: none;
     transition: all 0.3s;
@@ -617,50 +601,16 @@ const style = `
   footer {
     text-align: center;
     padding: 3rem;
-    border-top: 1px solid rgba(0,245,255,0.08);
+    border-top: 1px solid rgba(148,163,184,0.08);
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.65rem;
-    color: rgba(200,230,255,0.2);
+    color: rgba(148,163,184,0.2);
     letter-spacing: 2px;
   }
 
   /* GLITCH */
-  .glitch {
-    position: relative;
-  }
-  .glitch::before, .glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0; left: 0;
-    background: linear-gradient(135deg, #fff, var(--cyan), var(--electric));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .glitch::before {
-    animation: glitch1 3s infinite;
-    clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
-    transform: translate(-2px, 0);
-    opacity: 0.7;
-  }
-  .glitch::after {
-    animation: glitch2 3s infinite;
-    clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
-    transform: translate(2px, 0);
-    opacity: 0.7;
-  }
-  @keyframes glitch1 {
-    0%, 95%, 100% { transform: translate(-2px, 0); }
-    96% { transform: translate(6px, 2px); }
-    97% { transform: translate(-4px, 1px); }
-    98% { transform: translate(2px, -2px); }
-  }
-  @keyframes glitch2 {
-    0%, 95%, 100% { transform: translate(2px, 0); }
-    96% { transform: translate(-6px, -1px); }
-    97% { transform: translate(4px, 2px); }
-    98% { transform: translate(-2px, 1px); }
-  }
+  .glitch { position: relative; }
+  .glitch::before, .glitch::after { display: none; }
 
   /* SCROLL REVEAL */
   .reveal {
@@ -677,7 +627,7 @@ const style = `
   .terminal-line {
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.75rem;
-    color: rgba(0,245,255,0.4);
+    color: rgba(148,163,184,0.35);
     letter-spacing: 1px;
     margin-bottom: 0.5rem;
   }
@@ -714,13 +664,13 @@ function ParticleCanvas() {
     window.addEventListener("resize", resize);
 
     // Particles
-    const particles = Array.from({ length: 80 }, () => ({
+    const particles = Array.from({ length: 40 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      size: Math.random() * 1.5 + 0.3,
-      opacity: Math.random() * 0.5 + 0.1,
+      vx: (Math.random() - 0.5) * 0.2,
+      vy: (Math.random() - 0.5) * 0.2,
+      size: Math.random() * 1 + 0.2,
+      opacity: Math.random() * 0.2 + 0.05,
     }));
 
     // Grid
