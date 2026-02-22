@@ -1278,7 +1278,7 @@ export default function Portfolio() {
           
           <h1 className="hero-name glitch" data-text="THARAN S M">THARAN S M</h1>
           
-          <p className="hero-role">ECE Student · Chip Designer · Verilog HDL</p>
+          <p className="hero-role">ECE Student · RTL Design Engineer · Verilog HDL</p>
 
           <div className="hero-availability">
             <span className="avail-dot" />
